@@ -1,4 +1,5 @@
 <template>
+  <!-- Si NO hay usuario logueado, mostramos la página de login -->
   <div v-if="!usuario" class="login-page">
     <div class="login-card">
       <h1 class="titulo-principal">Gestión de Incidencias UJA</h1>
@@ -6,6 +7,7 @@
     </div>
   </div>
 
+  <!-- Si SÍ hay usuario, mostramos la app principal -->
   <div v-else class="main-page">
     <div class="app-wrapper">
       <header class="barra-superior">
@@ -18,12 +20,15 @@
         </div>
       </header>
 
+      <!-- Contenido principal: formulario + listado -->
       <main class="contenido">
         <section class="panel panel-form">
           <issuesForm @incidencia-creada="forzarRecarga" />
         </section>
 
+        <!-- Panel con el listado de incidencias -->
         <section class="panel panel-lista">
+          <!-- Pasamos banderaRecarga para indicar al listado que debe recargar -->
           <issuesList :bandera-recarga="banderaRecarga" />
         </section>
       </main>
@@ -39,22 +44,29 @@ import loginForm from "./components/loginForm.vue";
 import issuesForm from "./components/issuesForm.vue";
 import issuesList from "./components/issuesList.vue";
 
+// Usuario autenticado (o null si no hay sesión)
 const usuario = ref(null);
+
+// Bandera numérica para forzar recarga en el listado
 const banderaRecarga = ref(0);
 
+// Se ejecuta cuando loginForm emite "sesion-iniciada"
 const manejarSesionIniciada = (u) => {
   usuario.value = u;
 };
 
+// Incrementa la bandera para avisar a issuesList de que recargue datos
 const forzarRecarga = () => {
   banderaRecarga.value++;
 };
 
+// Cierra sesión en Firebase y limpia el usuario
 const manejarCerrarSesion = async () => {
   await cerrarSesion();
   usuario.value = null;
 };
 
+// Al montar el componente, empezamos a escuchar cambios en la sesión
 onMounted(() => {
   escucharCambiosSesion((u) => {
     usuario.value = u || null;
@@ -63,6 +75,7 @@ onMounted(() => {
 </script>
 
 <style>
+/* Ajustes globales de tamaño y márgenes */
 html,
 body,
 #app {
@@ -71,16 +84,12 @@ body,
   padding: 0;
 }
 
+/* Fuente y fondo general de la página */
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: linear-gradient(135deg, #e0ecff, #f4f8ff);
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
 </style>
 
 <style scoped>
@@ -174,6 +183,7 @@ body {
   align-items: flex-start;
 }
 
+/* Paneles blancos con sombra (form y lista) */
 .panel {
   background-color: #ffffff;
   border-radius: 12px;
@@ -191,6 +201,7 @@ body {
   min-width: 420px;
 }
 
+/* Adaptación a pantallas pequeñas */
 @media (max-width: 900px) {
   .contenido {
     flex-direction: column;
