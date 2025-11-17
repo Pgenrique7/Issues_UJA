@@ -1,5 +1,5 @@
 <template>
-  <!-- Si NO hay usuario logueado, mostramos la página de login -->
+  <!-- Si no hay usuario logueado, mostramos la página de login -->
   <div v-if="!usuario" class="login-page">
     <div class="login-card">
       <h1 class="titulo-principal">Gestión de Incidencias UJA</h1>
@@ -7,7 +7,7 @@
     </div>
   </div>
 
-  <!-- Si SÍ hay usuario, mostramos la app principal -->
+  <!-- Si hay usuario, mostramos la app principal -->
   <div v-else class="main-page">
     <div class="app-wrapper">
       <header class="barra-superior">
